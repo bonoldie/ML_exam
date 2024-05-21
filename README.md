@@ -2,5 +2,5 @@
 
 Comparison between classification algorithms (parametric-nonparametric, ...)
 
-dataset: [Food-101](https://www.kaggle.com/datasets/kmader/food41/data)
+dataset: [Food-101](https://www.kaggle.com/datasets/kmader/food41)
 
