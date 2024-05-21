@@ -31,7 +31,7 @@ logger.get().info(f'images: {images.shape}')
 logger.get().info(f'unique_labels: {unique_labels.shape}')
 logger.get().info(f'images_labels: { images_labels.shape}')
 
-PCA_fit = PCA(images,2)
+PCA_fit = PCA(images,3)
 PCA_reduced_images = PCA_fit.extract_features(images)
 logger.get().info(f'PCA_reduced_images: { PCA_reduced_images.shape}')
 
@@ -39,33 +39,37 @@ logger.get().info(f'PCA_reduced_images: { PCA_reduced_images.shape}')
 # sklearnPCA_reduced_images =  sklearnPCA.transform(images)
 # logger.get().info(f'sklearnPCA_reduced_images: { sklearnPCA_reduced_images.shape}')
 
-tsne = sklearn.manifold.TSNE()
+tsne = sklearn.manifold.TSNE(n_components=3)
 tsne_reduced_images = tsne.fit_transform(images)
 
 # TODO: Fisher's LDA
 # borrowing from sklearn for now
-clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=2)
+clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=3)
 LDA_reduced_images = clf.fit(images, images_labels).transform(images)
 logger.get().info(f'LDA_reduced_images: { LDA_reduced_images.shape}')
+
+fig = plt.figure()
+ax1 = fig.add_subplot(131, projection='3d')
+ax2 = fig.add_subplot(132, projection='3d')
+ax3 = fig.add_subplot(133, projection='3d')
 
 plt.subplot(1,3,1)
 plt.title('PCA')
 for i in range(4):
     idx = i * 20
-    plt.scatter(PCA_reduced_images[images_labels == idx, 0], PCA_reduced_images[images_labels == idx, 1])
+    ax1.scatter(PCA_reduced_images[images_labels == idx, 0], PCA_reduced_images[images_labels == idx, 1], PCA_reduced_images[images_labels == idx, 2])
 
 plt.subplot(1,3,2)
 plt.title('LDA')
 for i in range(4):
     idx = i * 20
-    plt.scatter(LDA_reduced_images[images_labels == idx, 0], LDA_reduced_images[images_labels == idx, 1])
+    ax2.scatter(LDA_reduced_images[images_labels == idx, 0], LDA_reduced_images[images_labels == idx, 1], LDA_reduced_images[images_labels == idx, 2])
 
 plt.subplot(1,3,3)
 plt.title('t-SNE')
 for i in range(4):
     idx = i * 20
-    plt.scatter(tsne_reduced_images[images_labels == idx, 0], tsne_reduced_images[images_labels == idx, 1])
-
+    ax3.scatter(tsne_reduced_images[images_labels == idx, 0], tsne_reduced_images[images_labels == idx, 1], tsne_reduced_images[images_labels == idx, 2])
 
 plt.show()
 
