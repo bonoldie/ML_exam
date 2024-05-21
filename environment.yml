@@ -20,6 +20,7 @@ dependencies:
   - brotli-bin=1.0.9=h5eee18b_7
   - brotli-python=1.0.9=py310h6a678d5_7
   - bzip2=1.0.8=h5eee18b_5
+  - c-ares=1.19.1=h5eee18b_0
   - ca-certificates=2024.3.11=h06a4308_0
   - certifi=2024.2.2=py310h06a4308_0
   - cffi=1.16.0=py310h5eee18b_0
@@ -50,6 +51,8 @@ dependencies:
   - gnutls=3.6.15=he1e5248_0
   - gst-plugins-base=1.14.1=h6a678d5_1
   - gstreamer=1.14.1=h5eee18b_1
+  - h5py=3.11.0=py310hbe37b52_0
+  - hdf5=1.12.1=h2b7332f_3
   - icu=73.1=h6a678d5_0
   - idna=3.4=py310h06a4308_0
   - intel-openmp=2023.1.0=hdb19cb5_46306
@@ -87,8 +90,10 @@ dependencies:
   - libclang=14.0.6=default_hc6dbbc7_1
   - libclang13=14.0.6=default_he11475f_1
   - libcups=2.4.2=h2d74bed_1
+  - libcurl=8.7.1=h251f7ec_0
   - libdeflate=1.17=h5eee18b_1
   - libedit=3.1.20230828=h5eee18b_0
+  - libev=4.33=h7f8727e_1
   - libffi=3.4.4=h6a678d5_0
   - libgcc-ng=11.2.0=h1234567_1
   - libgfortran-ng=11.2.0=h00389a5_1
@@ -99,10 +104,12 @@ dependencies:
   - libidn2=2.3.4=h5eee18b_0
   - libjpeg-turbo=2.0.0=h9bf148f_0
   - libllvm14=14.0.6=hdb19cb5_3
+  - libnghttp2=1.57.0=h2d74bed_0
   - libpng=1.6.39=h5eee18b_0
   - libpq=12.17=hdbd6064_0
   - libprotobuf=3.20.3=he621ea3_0
   - libsodium=1.0.18=h7b6447c_0
+  - libssh2=1.11.0=h251f7ec_0
   - libstdcxx-ng=11.2.0=h1234567_1
   - libtasn1=4.19.0=h5eee18b_0
   - libtiff=4.5.1=h6a678d5_0
