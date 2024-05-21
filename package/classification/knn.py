@@ -1,5 +1,5 @@
 import numpy as np
-from scripts.utils.logger import logger
+from package.utils.logger import logger
 
 class KNN:
     data = np.array()

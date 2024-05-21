@@ -28,4 +28,7 @@ fileHandler.setFormatter(fmt)
 logger.addHandler(stdoutHandler)
 logger.addHandler(fileHandler)
 
-sys.modules[__name__] = logger
+def get():
+    return logger
+
+
