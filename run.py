@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats
 import sklearn
 import sklearn.decomposition
 import sklearn.discriminant_analysis
 import sklearn.manifold
+import scipy
 from package.utils import logger
 from package.reduction.pca import PCA
 import h5py
@@ -14,62 +16,63 @@ ds_10099_r32x32x1 = 'food_c101_n10099_r32x32x1'
 # 10099 (64x64) images, 1 channel
 ds_110099_r64x64x1 = 'food_c101_n10099_r64x64x1'
 
-dsH5 = h5py.File(f'.ds/{ds_10099_r32x32x1}.h5', 'r')
+# 10099 (64x64) images, 1 channel
+ds_000_r384x384x3 = 'food_c101_n1000_r384x384x3'
+
+ds_test_c101_n1000_r64x64x1 = 'food_test_c101_n1000_r64x64x1'
+
+dsH5 = h5py.File(f'.ds/{ds_110099_r64x64x1}.h5', 'r')
+
+dsTestH5 = h5py.File(f'.ds/{ds_test_c101_n1000_r64x64x1}.h5', 'r')
 
 # Load images and vectorization
 images = dsH5['images']
 images = np.reshape(images, (images.shape[0], images.shape[1]*images.shape[2] ))
 
-unique_labels = dsH5['category_names']
+test_images = dsTestH5['images']
+test_images =  np.reshape(test_images, (test_images.shape[0], test_images.shape[1]*test_images.shape[2] ))
 
-# 10099x101 array
-labels = dsH5['category']
-# 10099 vector
-images_labels = np.array(np.transpose(np.nonzero(labels[:]))[:, 1])
+unique_labels = np.asarray(dsH5['category_names'])
+
+labels =  np.asarray(dsH5['category'])
+test_labels = np.asarray(dsTestH5['category'])
+
+images_labels = np.argwhere(labels)[:, 1]
+test_images_labels = np.argwhere(test_labels)[:, 1]
+images_labels_text = unique_labels[images_labels]
 
 logger.get().info(f'images: {images.shape}')
 logger.get().info(f'unique_labels: {unique_labels.shape}')
-logger.get().info(f'images_labels: { images_labels.shape}')
+logger.get().info(f'images_labels: { images_labels_text.shape}')
 
-PCA_fit = PCA(images,3)
+PCA_fit = PCA(images,8)
 PCA_reduced_images = PCA_fit.extract_features(images)
+PCA_test_images = PCA_fit.extract_features(test_images)
 logger.get().info(f'PCA_reduced_images: { PCA_reduced_images.shape}')
 
-# sklearnPCA = sklearn.decomposition.PCA(2).fit(images)
-# sklearnPCA_reduced_images =  sklearnPCA.transform(images)
-# logger.get().info(f'sklearnPCA_reduced_images: { sklearnPCA_reduced_images.shape}')
+# densities = np.empty(test_images.shape[0])
+estimators = list()
 
-tsne = sklearn.manifold.TSNE(n_components=3)
-tsne_reduced_images = tsne.fit_transform(images)
+pdfs = np.empty([1000])
 
-# TODO: Fisher's LDA
-# borrowing from sklearn for now
-clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=3)
-LDA_reduced_images = clf.fit(images, images_labels).transform(images)
-logger.get().info(f'LDA_reduced_images: { LDA_reduced_images.shape}')
+for i in range(unique_labels.shape[0]):
+    #label_idx = i
+    #label = images_labels[label_idx]
+    PCA_images = PCA_reduced_images[images_labels == i, :]
 
-fig = plt.figure()
-ax1 = fig.add_subplot(131, projection='3d')
-ax2 = fig.add_subplot(132, projection='3d')
-ax3 = fig.add_subplot(133, projection='3d')
+    mean = np.mean(PCA_images, axis=0)
 
-plt.subplot(1,3,1)
-plt.title('PCA')
-for i in range(4):
-    idx = i * 20
-    ax1.scatter(PCA_reduced_images[images_labels == idx, 0], PCA_reduced_images[images_labels == idx, 1], PCA_reduced_images[images_labels == idx, 2])
+    cov = np.cov(np.transpose(PCA_images))
 
-plt.subplot(1,3,2)
-plt.title('LDA')
-for i in range(4):
-    idx = i * 20
-    ax2.scatter(LDA_reduced_images[images_labels == idx, 0], LDA_reduced_images[images_labels == idx, 1], LDA_reduced_images[images_labels == idx, 2])
+    pdf = scipy.stats.multivariate_normal.pdf(PCA_test_images, mean=mean, cov=cov, allow_singular=False)
 
-plt.subplot(1,3,3)
-plt.title('t-SNE')
-for i in range(4):
-    idx = i * 20
-    ax3.scatter(tsne_reduced_images[images_labels == idx, 0], tsne_reduced_images[images_labels == idx, 1], tsne_reduced_images[images_labels == idx, 2])
+    pdfs = np.vstack((pdfs, pdf))
 
-plt.show()
 
+preds = np.argmax(pdfs, axis=0)
+
+print((test_images_labels.shape, preds.shape))
+
+precision = np.count_nonzero(test_images_labels == preds) / test_images_labels.shape[0]
+
+print(precision)
