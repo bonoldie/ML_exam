@@ -7,7 +7,6 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-from scipy.stats import multivariate_normal
 
 # Bootstrap
 ds = np.load('.ds.tiny/dataset.zip')
@@ -56,32 +55,30 @@ logger.info(['Unique training labels size:', unique_train_labels.shape])
 #test_images = np.mean(test_images)
 
 # plt.imshow(train_images[0])
-train_images = train_images[:,:,:,:].reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2], 3))
-test_images = test_images[:,:,:,:].reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2], 3))
+train_images_1 = train_images[:,:,:,0].reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2]))
+train_images_2 = train_images[:,:,:,1].reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2]))
+train_images_3 = train_images[:,:,:,2].reshape((train_images.shape[0], train_images.shape[1]*train_images.shape[2]))
 
-pca = [PCA(n_components=100), PCA(n_components=100), PCA(n_components=100)]
+test_images_1 = test_images[:,:,:,0].reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2]))
+test_images_2 = test_images[:,:,:,1].reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2]))
+test_images_3 = test_images[:,:,:,2].reshape((test_images.shape[0], test_images.shape[1]*test_images.shape[2]))
 
-pca_train_images = []
-pca_test_images = []
+pca_1 = PCA(n_components=100)
+pca_2 = PCA(n_components=100)
+pca_3 = PCA(n_components=100)
 
-for i in range(3):
-    pca[i].fit(train_images[:,:,i]) 
-    pca_train_images.append(pca[i].transform(train_images[:,:,i])) 
-    pca_test_images.append(pca[i].transform(test_images[:,:,i])) 
+PCA_train_images_1 = pca_1.fit_transform(train_images_1)
+PCA_train_images_2 = pca_2.fit_transform(train_images_2)
+PCA_train_images_3 = pca_3.fit_transform(train_images_3)
 
-    logger.info([f'PCA{i} variance ratio: ', np.sum(pca[i].explained_variance_ratio_)])
 
-estimators = []
+logger.info(['PCA1 variance ratio: ', np.sum(pca_1.explained_variance_ratio_)])
+logger.info(['PCA2 variance ratio: ', np.sum(pca_2.explained_variance_ratio_)])
+logger.info(['PCA3 variance ratio: ', np.sum(pca_3.explained_variance_ratio_)])
 
-for labelIdx in range(unique_train_labels.shape[0]):
-    estimators.append([])
-    label = unique_train_labels[labelIdx]
-
-    for i in range(3):
-        estimators[labelIdx].append(multivariate_normal(np.mean(pca_train_images[i][train_labels == label]), np.cov(np.transpose(pca_train_images[i][train_labels == label]))))
-
-print(estimators)
-
+PCA_test_images_1 = pca_1.transform(test_images_1)
+PCA_test_images_2 = pca_2.transform(test_images_2)
+PCA_test_images_3 = pca_3.transform(test_images_3)
 
 #tnse = TSNE(n_components=3)
 #TNSE_train_images = tnse.fit_transform(train_images)
@@ -100,24 +97,24 @@ print(estimators)
 
 # plt.show()
 
-# svm_1 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_1, train_labels)
-# svm_2 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_2, train_labels)
-# svm_3 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_3, train_labels)
+svm_1 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_1, train_labels)
+svm_2 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_2, train_labels)
+svm_3 = SVC(kernel='poly', max_iter=100000).fit(PCA_train_images_3, train_labels)
 
-# preds_1 = svm_1.predict(PCA_test_images_1)
-# preds_2 = svm_2.predict(PCA_test_images_2)
-# preds_3 = svm_3.predict(PCA_test_images_3)
+preds_1 = svm_1.predict(PCA_test_images_1)
+preds_2 = svm_2.predict(PCA_test_images_2)
+preds_3 = svm_3.predict(PCA_test_images_3)
 
-# cm_1 = confusion_matrix(test_labels, preds_1, normalize='all')
-# cm_2 = confusion_matrix(test_labels, preds_2, normalize='all')
-# cm_3 = confusion_matrix(test_labels, preds_3, normalize='all')
+cm_1 = confusion_matrix(test_labels, preds_1, normalize='all')
+cm_2 = confusion_matrix(test_labels, preds_2, normalize='all')
+cm_3 = confusion_matrix(test_labels, preds_3, normalize='all')
 
-# fig, axes = plt.subplots(1,3)
+fig, axes = plt.subplots(1,3)
 
-# ConfusionMatrixDisplay(cm_1,display_labels=svm_1.classes_).plot(ax=axes[0])
-# ConfusionMatrixDisplay(cm_2,display_labels=svm_2.classes_).plot(ax=axes[1])
-# ConfusionMatrixDisplay(cm_3,display_labels=svm_3.classes_).plot(ax=axes[2])
+ConfusionMatrixDisplay(cm_1,display_labels=svm_1.classes_).plot(ax=axes[0])
+ConfusionMatrixDisplay(cm_2,display_labels=svm_2.classes_).plot(ax=axes[1])
+ConfusionMatrixDisplay(cm_3,display_labels=svm_3.classes_).plot(ax=axes[2])
 
-# plt.show()
+plt.show()
 
 

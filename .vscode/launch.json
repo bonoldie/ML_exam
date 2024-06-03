@@ -8,7 +8,7 @@
             "name": "Run",
             "type": "debugpy",
             "request": "launch",
-            "program": "run.py",
+            "program": "${file}",
             "console": "integratedTerminal",
             "args": ""
         }

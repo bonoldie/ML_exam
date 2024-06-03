@@ -68,13 +68,13 @@ logger.get().info(f'PCA_reduced_images: { PCA_reduced_images.shape}')
 
 # TODO: Fisher's LDA
 # borrowing from sklearn for now
-# clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=3)
-# LDA_reduced_images = clf.fit(images, images_labels).transform(images)
-# logger.get().info(f'LDA_reduced_images: { LDA_reduced_images.shape}')
+clf = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=2)
+LDA_reduced_images = clf.fit(selected_images, selected_labels).transform(images)
+logger.get().info(f'LDA_reduced_images: { LDA_reduced_images.shape}')
 
 fig = plt.figure()
 ax1 = fig.add_subplot(131, projection='3d')
-# ax2 = fig.add_subplot(132, projection='3d')
+ax2 = fig.add_subplot(132)
 # ax3 = fig.add_subplot(133, projection='3d')
 
 mean_1 = np.mean(PCA_reduced_images[selected_labels==23])
@@ -95,6 +95,10 @@ ax1.scatter(PCA_reduced_images[selected_labels==10, 0], PCA_reduced_images[selec
 ax1.scatter(PCA_reduced_images[selected_labels==58, 0], PCA_reduced_images[selected_labels==58, 1], PCA_reduced_images[selected_labels==58, 2],c='g')
 #ax1.scatter(PCA_reduced_images[images_labels_text == b"nachos", 0], PCA_reduced_images[images_labels_text == b"nachos", 1], PCA_reduced_images[images_labels_text == b"nachos", 2])
 #ax1.scatter(PCA_reduced_images[images_labels_text == b"cheesecake", 0], PCA_reduced_images[images_labels_text == b"cheesecake", 1], PCA_reduced_images[images_labels_text == b"cheesecake", 2])
+
+ax2.scatter(LDA_reduced_images[selected_labels==23, 0], LDA_reduced_images[selected_labels==23, 1], c='b')
+ax2.scatter(LDA_reduced_images[selected_labels==10, 0], LDA_reduced_images[selected_labels==10, 1], c='r')
+ax2.scatter(LDA_reduced_images[selected_labels==58, 0], LDA_reduced_images[selected_labels==58, 1], c='g')
 plt.show()
 
 # plt.subplot(1,3,2)

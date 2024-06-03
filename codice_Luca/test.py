@@ -34,7 +34,8 @@ class LDA_mia:
         n_feature = X.shape[
             1
         ]  # (150,4); index zero is the number of samples, so index 1 in the number of features
-        class_labels = np.unique(y)  # return the unique value in the labels in a list
+        # return the unique value in the labels in a list
+        class_labels = np.unique(y)
 
         # Now I calculate the 2 scatter matrices, intra-class and between class
         mean_overall = np.mean(X, axis=0)
@@ -78,7 +79,7 @@ class LDA_mia:
             eigenvalues = eigenvalues[idxs]
             eigenvectors = eigenvectors[idxs]
             self.linear_discriminants = eigenvectors[
-                0 : self.n_components
+                0: self.n_components
             ]  # from the element zero (larger) to the number that I specify
 
     def transform(
@@ -114,7 +115,7 @@ class PCA_mia:
         eigenvectors = eigenvectors[idxs]
 
         # store first n eigenvectors
-        self.components = eigenvectors[0 : self.n_components]
+        self.components = eigenvectors[0: self.n_components]
 
     def transform(self, X):
         # project data
@@ -217,7 +218,8 @@ luca_LDA_projection = lda.transform(img_list)
 print("LDA Luca:", np.shape(luca_LDA_projection))
 
 ###### LDA sklearn ######
-lda_sk = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(n_components=3)
+lda_sk = sklearn.discriminant_analysis.LinearDiscriminantAnalysis(
+    n_components=3)
 sklearn_LDA_projection = lda_sk.fit_transform(img_list, labels)
 print("LDA sklearn:", np.shape(sklearn_LDA_projection))
 
