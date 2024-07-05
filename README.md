@@ -1,6 +1,31 @@
-# Machine learning & artificial intelligence - CERSI A.A. 23/24
+# Machine learning & artificial intelligence project - Computer engineering for robotics and smart industries - A.A. 2023/24
 
-Comparison between classification algorithms (parametric-nonparametric, ...)
+__Comparison between classification algorithms__ 
 
-dataset: [Food-101](https://www.kaggle.com/datasets/kmader/food41)
+Authors: Bonoldi Enrico, Luca Ponti   
 
+dataset: [food-101-tiny](https://www.kaggle.com/datasets/kmader/food41)
+
+## Quickstart 
+
+### Linux 
+
+Create and activate the conda environment
+
+```bash
+conda env create -f environment.yml && conda activate $(head -1 environment.yml | cut -d':' -f 2)
+``` 
+
+Run the bootstrap script to download the dataset
+
+```bash
+./bootstrap_dataset.py
+```
+
+Launch the notebook 
+
+```bash
+jupyter notebook
+```
+
+or use the notebook the vs-code extension

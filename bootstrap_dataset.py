@@ -25,4 +25,4 @@ def downloadFromUrl(url, filename, ds_dir = ".ds", force = False):
 
     return ds_path
 
-ds_path = downloadFromUrl("https://www.kaggle.com/datasets/msarmi9/food101tiny?resource=download", "dataset.zip", ".ds.tiny.test")
+ds_path = downloadFromUrl("https://www.kaggle.com/datasets/msarmi9/food101tiny?resource=download", "dataset.zip", ".ds.tiny")
