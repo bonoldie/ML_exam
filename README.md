@@ -16,12 +16,6 @@ Create and activate the conda environment
 conda env create -f environment.yml && conda activate $(head -1 environment.yml | cut -d':' -f 2)
 ``` 
 
-Run the bootstrap script to download the dataset
-
-```bash
-./bootstrap_dataset.py
-```
-
 Launch the notebook 
 
 ```bash
