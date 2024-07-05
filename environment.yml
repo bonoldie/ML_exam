@@ -1,10 +1,11 @@
 name: uni
 channels:
   - pytorch
+  - conda-forge
   - defaults
 dependencies:
-  - _libgcc_mutex=0.1=main
-  - _openmp_mutex=5.1=1_gnu
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
   - anyio=4.2.0=py310h06a4308_0
   - argon2-cffi=21.3.0=pyhd3eb1b0_0
   - argon2-cffi-bindings=21.2.0=py310h7f8727e_0
@@ -21,8 +22,8 @@ dependencies:
   - brotli-python=1.0.9=py310h6a678d5_7
   - bzip2=1.0.8=h5eee18b_5
   - c-ares=1.19.1=h5eee18b_0
-  - ca-certificates=2024.3.11=h06a4308_0
-  - certifi=2024.2.2=py310h06a4308_0
+  - ca-certificates=2024.6.2=hbcca054_0
+  - certifi=2024.2.2=pyhd8ed1ab_0
   - cffi=1.16.0=py310h5eee18b_0
   - charset-normalizer=2.0.4=pyhd3eb1b0_0
   - comm=0.2.1=py310h06a4308_0
@@ -95,11 +96,11 @@ dependencies:
   - libedit=3.1.20230828=h5eee18b_0
   - libev=4.33=h7f8727e_1
   - libffi=3.4.4=h6a678d5_0
-  - libgcc-ng=11.2.0=h1234567_1
+  - libgcc-ng=13.2.0=h77fa898_7
   - libgfortran-ng=11.2.0=h00389a5_1
   - libgfortran5=11.2.0=h1234567_1
   - libglib=2.78.4=hdc74915_0
-  - libgomp=11.2.0=h1234567_1
+  - libgomp=13.2.0=h77fa898_7
   - libiconv=1.16=h7f8727e_2
   - libidn2=2.3.4=h5eee18b_0
   - libjpeg-turbo=2.0.0=h9bf148f_0
@@ -151,7 +152,7 @@ dependencies:
   - numpy-base=1.26.4=py310hb5e798b_0
   - openh264=2.1.1=h4ff587b_0
   - openjpeg=2.4.0=h3ad879b_0
-  - openssl=3.0.13=h7f8727e_1
+  - openssl=3.3.0=h4ab18f5_3
   - overrides=7.4.0=py310h06a4308_0
   - packaging=23.2=py310h06a4308_0
   - pandas=2.2.1=py310h6a678d5_0
@@ -208,7 +209,7 @@ dependencies:
   - sympy=1.12=py310h06a4308_0
   - tbb=2021.8.0=hdb19cb5_0
   - terminado=0.17.1=py310h06a4308_0
-  - threadpoolctl=2.2.0=pyh0d69192_0
+  - threadpoolctl=3.5.0=pyhc1e730c_0
   - tinycss2=1.2.1=py310h06a4308_0
   - tk=8.6.12=h1ccaba5_0
   - tomli=2.0.1=py310h06a4308_0
@@ -233,6 +234,7 @@ dependencies:
   - pip:
       - absl-py==2.1.0
       - etils==1.7.0
+      - hasel==1.0.1
       - importlib-resources==6.4.0
       - isodate==0.6.1
       - jsonpath-rw==1.4.0
